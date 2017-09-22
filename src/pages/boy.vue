@@ -1,6 +1,6 @@
 <template>
-  <div id="page2">
-    我是page2
+  <div id="boy">
+    boy
   </div>
 </template>
 
@@ -15,7 +15,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  #page2
+  #boy
     position absolute
     top 0px
     left 0px
