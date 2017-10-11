@@ -4,12 +4,22 @@
       <div class="header-title" @click="changeGender('female')" :class="{active: gender === 'female'}">女生版</div>
       <div class="header-title" @click="changeGender('male')" :class="{active: gender === 'male'}">男生版</div>
     </div>
-    <div class="theme-list">
-      <section class="" v-for="theme in themes">
-        <img :src="theme.imgUrl" class="theme-img"  alt="">
-        <div class="lock-panel"></div>
-      </section>
-    </div>
+    <transition name="slide">
+      <div class="theme-list" v-show="gender==='female'">
+        <section class="" v-for="theme in femaleThemes">
+          <img :src="theme.imgUrl" class="theme-img"  alt="">
+          <div class="lock-panel"></div>
+        </section>
+      </div>
+    </transition>
+    <transition name="slide">
+      <div class="theme-list" v-show="gender==='male'">
+        <section class="" v-for="theme in maleThemes">
+          <img :src="theme.imgUrl" class="theme-img"  alt="">
+          <div class="lock-panel"></div>
+        </section>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -20,7 +30,8 @@
     data () {
       return {
         gender: 'female',
-        themes:[]
+        femaleThemes:[],
+        maleThemes:[]
       }
     },
     created(){
@@ -36,7 +47,7 @@
         const url = `http://beta.hersgirl.com/api/fetchThemeList?uid=6f7ad4e4fc9a4d86afb4717733464211&gender=${gender}`
         axios.get(url)
           .then((res)=>{
-            this.themes = res.data
+            this[`${gender}Themes`] = res.data
           })
           .catch((err)=>{
             console.log('网络错误，稍后重试');
@@ -74,4 +85,12 @@
 
     .theme-list
       margin-top 100px
+    /*.slide-enter-active
+      transition transform .8s
+    .slide-enter
+      transform translateX(750px)*/
+    .slide-leave-active
+      transition transform 0.8s
+    .slide-leave-to
+      transform translateX(750px)
 </style>
