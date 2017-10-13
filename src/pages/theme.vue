@@ -1,6 +1,6 @@
 <template>
-  <div id="girl">
-    girl
+  <div>
+
   </div>
 </template>
 
@@ -15,11 +15,5 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  #girl
-    position absolute
-    top 0px
-    left 0px
-    wh(100%, 100%)
-    background-color #6fa
-    text-align center
+
 </style>

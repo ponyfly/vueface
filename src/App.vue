@@ -15,6 +15,7 @@ export default {
   @import './style/mixin.styl'
   #app
     wh(750px, 100%)
+    min-height 100%
     margin 0 auto
     position relative
 </style>
