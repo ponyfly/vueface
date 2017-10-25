@@ -1,1 +1,201 @@
-function Tools(){this._init.apply(this,arguments)}var mychoiceis="T7B16YMQNHH5S6EAAPRFLVDY95QM1C";Tools.prototype={varructor:Tools,_init:function(){this.channel="album-gamma-first"},_ajaxGetData:function(K,s){$.ajax({method:K.method,url:K.url,data:K.data,timeout:15e3}).done(function(K){s&&s(K)}).fail(function(K,s){console.log(s)})},_readerImg:function(K,s){var x=this,d=0,N=K.files[0];EXIF.getData(N,function(){EXIF.pretty(this),EXIF.getTag(this,"PixelXDimension"),EXIF.getTag(this,"PixelYDimension");var K=EXIF.getTag(this,"Orientation");3==K?d=180:6==K?d=90:8==K?d=270:1==K&&(d=0),localStorage.setItem("_rotate",d)});var f=new FileReader;f.readAsDataURL(N),f.onload=function(K){x.fileReader64=this.result,s&&s(x.fileReader64)}},_Compress:function(K,s){var x=$("<canvas></canvas>")[0],d=x.getContext("2d");if(!K)return void console.log("no file 不正常的调用");var N="object"!=typeof K,f=0,J=N?K:URL.createObjectURL(K),v=new Image;v.onload=function(){var K=this.width,N=this.height,J=K/N,S=K,j=N;K>1e3&&(S=1e3,j=1e3/J);var R=f%2>0,z=R?j:S,k=R?S:j;x.width=z,x.height=k,d.save(),d.translate(z/2,k/2),d.rotate(90*f/180*Math.PI),d.drawImage(v,0,0,K,N,-S/2,-j/2,S,j),d.restore(),s&&s(x.toDataURL("image/jpeg",.6))},N?v.src=J:EXIF.getData(K,function(){f=EXIF.getTag(this,"Orientation"),f=f>=2&&f<=8?(f-1)%4:0,v.src=J})},_GetQueryString:function(K){var s=new RegExp("(^|&)"+K+"=([^&]*)(&|$)"),x=window.location.search.substr(1).match(s);return null!=x?unescape(x[2]):null},_send1_1:function(K,s,x){function d(){return null==J?(window.localStorage?localStorage.setItem("uuid",v):N._setCookie("uuid",v),v):J}var N=this,f="",J=localStorage.getItem("uuid")||N._getCookie("uuid"),v=N._uuid();f=void 0==s?N.channel:s;var S=null==N._GetQueryString("jcnappid")?d():N._GetQueryString("jcnappid"),j=null==N._GetQueryString("jcnuserid")?d():N._GetQueryString("jcnuserid"),R=new Image;K&&"string"==typeof K&&(R.src="/js/1x1.gif?ucs=UTF-8&un=statistic_channel."+f+"_logname."+K+"_login.0&timestamp="+(new Date-0)+"&jcnappid="+S+"&jcnuserid="+j),console.log("loading-1*1"),R.onload=function(){console.log("1*1 loaded"),x&&x()}},_uuid:function(){var K="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split("");return Math.uuid=function(s,x){var d,N=K,f=[];if(x=x||N.length,s)for(d=0;d<s;d++)f[d]=N[0|Math.random()*x];else{var J;for(f[8]=f[13]=f[18]=f[23]="-",f[14]="4",d=0;d<36;d++)f[d]||(J=0|16*Math.random(),f[d]=N[19==d?3&J|8:J])}return f.join("")},Math.uuidFast=function(){for(var s,x=K,d=new Array(36),N=0,f=0;f<36;f++)8==f||13==f||18==f||23==f?d[f]="-":14==f?d[f]="4":(N<=2&&(N=33554432+16777216*Math.random()|0),s=15&N,N>>=4,d[f]=x[19==f?3&s|8:s]);return d.join("")},Math.uuidCompact=function(){return"xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g,function(K){var s=16*Math.random()|0;return("x"==K?s:3&s|8).toString(16)})},Math.uuidCompact()},_setCookie:function(K,s){var x=new Date;x.setTime(x.getTime()+2592e6),document.cookie=K+"="+escape(s)+";expires="+x.toGMTString()},_getCookie:function(K){var s,x=new RegExp("(^| )"+K+"=([^;]*)(;|$)");return(s=document.cookie.match(x))?unescape(s[2]):null},_delCookie:function(K){var s=new Date;s.setTime(s.getTime()-1);var x=getCookie(K);null!=x&&(document.cookie=K+"="+x+";expires="+s.toGMTString())},_runningEnvironment:function(){var K=navigator.userAgent.toLowerCase(),s=K.indexOf("micromessenger")>-1,x=K.indexOf("qq")>-1,d=K.indexOf("weibo")>-1,N=K.indexOf("iphone")>-1,f=K.indexOf("android")>-1,J=K.indexOf("ucbrowser")>-1;return{weixin:s,qq:x,weibo:d,iphone:N,android:f,baidu:K.indexOf("baidu")>-1,pc:J?window.screen.width/2>768:window.screen.width>768,momo:K.indexOf("momowebview")>-1}},_testUrl:function(K){return/^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/.test(K)}},window.TOOLS=new Tools;
+class Tools {
+  constructor () {
+    this.channel = 'album-gamma-first'
+  }
+
+  /**
+   * 获取连接参数
+   * @return {[type]} [description]
+   */
+  _GetQueryString (name) {
+    let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+    let r = window.location.search.substr(1).match(reg)
+    if (r != null) return unescape(r[2])
+    return null
+  }
+
+  /**
+   * 1x1统计
+   * @param  {[type]}   name     [description]
+   * @param  {[type]}   val      [description]
+   * @param  {Function} callback [description]
+   * @return {[type]}            [description]
+   */
+  _send1_1 (val, _channel, callback) {
+
+    let that = this,
+      channel = ''
+    //获取本地uuid
+    let get_uuid = localStorage.getItem('uuid') || that._getCookie('uuid')
+    let set_uuid = that._uuid()
+
+    if (_channel == undefined) {
+      channel = that.channel
+    } else {
+      channel = _channel
+    }
+
+    //设置统计参数
+    let jcnappid = that._GetQueryString('jcnappid') == null ? getUuid() : that._GetQueryString('jcnappid'),
+      jcnuserid = that._GetQueryString('jcnuserid') == null ? getUuid() : that._GetQueryString('jcnuserid')
+
+    let img1x1 = new Image()
+
+    if (val && typeof val == 'string') {
+      img1x1.src = '/js/1x1.gif?ucs=UTF-8&un=statistic_channel.' + channel + '_logname.' + val + '_login.0&timestamp=' + (new Date() - 0) + '&jcnappid=' + jcnappid + '&jcnuserid=' + jcnuserid
+    }
+    console.log('loading-1*1')
+
+    img1x1.onload = function () {
+      console.log('1*1 loaded')
+      callback && callback()
+    }
+
+    function getUuid () {
+      if (get_uuid == null) {
+        if (window.localStorage) {
+          //写入localStorage
+          localStorage.setItem('uuid', set_uuid)
+        } else {
+          //写入cookie
+          that._setCookie('uuid', set_uuid)
+        }
+        return set_uuid
+      } else {
+        return get_uuid
+      }
+    }
+  }
+
+  /**
+   * 生成用户uuid
+   * @return {[type]} [description]
+   */
+  _uuid () {
+    // Private array of chars to use
+    var CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
+
+    Math.uuid = function (len, radix) {
+      var chars = CHARS,
+        uuid = [],
+        i
+      radix = radix || chars.length
+
+      if (len) {
+        // Compact form
+        for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+      } else {
+        // rfc4122, version 4 form
+        var r
+
+        // rfc4122 requires these characters
+        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
+        uuid[14] = '4'
+
+        // Fill in random data.  At i==19 set the high bits of clock sequence as
+        // per rfc4122, sec. 4.1.5
+        for (i = 0; i < 36; i++) {
+          if (!uuid[i]) {
+            r = 0 | Math.random() * 16
+            uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r]
+          }
+        }
+      }
+
+      return uuid.join('')
+    }
+
+    // A more performant, but slightly bulkier, RFC4122v4 solution.  We boost performance
+    // by minimizing calls to random()
+    Math.uuidFast = function () {
+      var chars = CHARS,
+        uuid = new Array(36),
+        rnd = 0,
+        r
+      for (var i = 0; i < 36; i++) {
+        if (i == 8 || i == 13 || i == 18 || i == 23) {
+          uuid[i] = '-'
+        } else if (i == 14) {
+          uuid[i] = '4'
+        } else {
+          if (rnd <= 0x02) rnd = 0x2000000 + (Math.random() * 0x1000000) | 0
+          r = rnd & 0xf
+          rnd = rnd >> 4
+          uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r]
+        }
+      }
+      return uuid.join('')
+    }
+
+    // A more compact, but less performant, RFC4122v4 solution:
+    Math.uuidCompact = function () {
+      return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+          v = c == 'x' ? r : (r & 0x3 | 0x8)
+        return v.toString(16)
+      })
+    }
+    return Math.uuidCompact()
+  }
+
+  //写cookies
+  _setCookie (name, value) {
+    var Days = 30
+    var exp = new Date()
+    exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000)
+    document.cookie = name + '=' + escape(value) + ';expires=' + exp.toGMTString()
+  }
+
+  //读取cookies
+  _getCookie (name) {
+    var arr, reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
+    if (arr = document.cookie.match(reg))
+      return unescape(arr[2])
+    else
+      return null
+  }
+
+  //删除cookies
+  _delCookie (name) {
+    var exp = new Date()
+    exp.setTime(exp.getTime() - 1)
+    var cval = getCookie(name)
+    if (cval != null)
+      document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
+  }
+
+  _runningEnvironment () {
+    var ua = navigator.userAgent.toLowerCase(),
+      isWeixin = ua.indexOf('micromessenger') > -1,
+      isQQ = ua.indexOf('qq') > -1,
+      isWeibo = ua.indexOf('weibo') > -1,
+      isIphone = ua.indexOf('iphone') > -1,
+      isAndroid = ua.indexOf('android') > -1,
+      isUc = ua.indexOf('ucbrowser') > -1,
+      isBaidu = ua.indexOf('baidu') > -1,
+      isPc = isUc ? window.screen.width / 2 > 768 : window.screen.width > 768,
+      isMomo = ua.indexOf('momowebview') > -1,
+      runningEnvironment = {}
+    //判断环境
+    runningEnvironment = {
+      'weixin': isWeixin,
+      'qq': isQQ,
+      'weibo': isWeibo,
+      'iphone': isIphone,
+      'android': isAndroid,
+      'baidu': isBaidu,
+      'pc': isPc,
+      'momo': isMomo
+    }
+    // console.log(runningEnvironment);
+    return runningEnvironment
+  }
+
+  //测试是否为有效的url格式
+  _testUrl (_url) {
+    var match = /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/
+    return match.test(_url)
+  }
+}
+
+export default Tools
