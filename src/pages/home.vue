@@ -86,6 +86,7 @@
         errorTip: {
           text: ''
         },
+        postfield: '',
         isFirstUse: false,
         isFaceError: false,
         isLoading: false
@@ -109,17 +110,11 @@
         if(this.gender === gender) return false
         this.gender = gender
         this.getThemes()
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+        const scrollTop = document.getElementById('home').scrollTop
         this.$refs[`${gender}Wrap`].style.top = `${scrollTop}px`
       },
       afterEnter() {
         window.scrollTo(0, 0)
-        this.$refs[`${this.gender}Wrap`].style.top = '0'
-        /*const hideGender = 'male' === this.gender ? 'female' : 'male'
-        const imgs = this.$refs[`${hideGender}Wrap`].querySelectorAll('.theme-img')
-        for(let i = 0,len = imgs.length;i<len;i++){
-          imgs[i].src = ""
-        }*/
       },
       getThemes() {
         const gender = this.gender
@@ -186,8 +181,8 @@
             oImg.src = result
             oImg.onload = function () {
               let base64 = self.compress(oImg, orientation)
-              self.headerImage = base64
-              self.postImg(base64.substr(23),self.curTheme.id)
+              self.postfield = base64.substr(23)
+              self.postImg(self.postfield,self.curTheme.id)
             }
           }
         }
@@ -218,10 +213,12 @@
                 case 0:
                   if(res.data.ok){
                     let params = {
+                      API_header: this.API_header,
                       curTheme: this.curTheme,
                       uid,
                       imgList: res.data.responseList,
-                      gender: this.gender
+                      gender: this.gender,
+                      postfield: this.postfield
                     }
                     if(this.isOffline){
                       this.$router.push({name: 'theme', params})
@@ -246,7 +243,7 @@
             }
           })
           .catch( err => {
-            console.log('网络错误');
+            console.log(err);
           })
       },
       /**
@@ -350,6 +347,9 @@
       background-position: -9984px 0
   #home
     width 100%
+    height 100%
+    position relative
+    overflow-y scroll
     .header
       position fixed
       top 0
@@ -394,9 +394,12 @@
           transition transform 618ms
         section
           width 100%
+          .theme-img[lazy=loaded]
+            width 100%
           .theme-img[src='']
             opacity 0
-          .theme-img[lazy='loading']
+          .theme-img[lazy=loading]
+            width auto
             display block
             margin 150px auto
     .avator
