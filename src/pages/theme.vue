@@ -21,7 +21,6 @@
       }
     },
     created(){
-      console.log(this.$route.params);
       this.getImgs()
     },
     computed: {},
@@ -29,8 +28,8 @@
       getImgs() {
         const {imgList } = this.$route.params
         if(imgList){
-          this.photoList = this.$route.params.imgList.map((item, index) => {
-            return item.imgShare
+          this.photoList = imgList.map((item, index) => {
+            return item.imgShare || item
           })
         }
       },

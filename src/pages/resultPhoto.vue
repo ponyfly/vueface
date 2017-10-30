@@ -158,6 +158,7 @@
   }
 
   #img-area img{
+    transform: translateZ(0);
     padding:10px; background: #fff; position: absolute; z-index: 96;
     transition:all .9s;
     -webkit-transition:all .9s;
